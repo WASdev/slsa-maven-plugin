@@ -5,7 +5,7 @@ This page describes a build type as outlined and recommended by https://slsa.dev
 ## Description
 
 ```jsonc
-"buildType" : "https://github.com/ayoho/slsa-maven-plugin/tree/main/v1.0"
+"buildType" : "https://github.com/WASdev/slsa-maven-plugin/tree/main/v1.0"
 ```
 
 This document describes the build type for the SLSA Maven Plugin. The plugin generates a SLSA Provenance file based on a Maven project using Git.

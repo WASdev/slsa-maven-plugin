@@ -36,7 +36,7 @@ import jakarta.json.JsonObject;
 @Mojo(name = "generate-provenance")
 public class GenerateProvenanceMojo extends AbstractMojo {
 
-    public static final String BUILD_TYPE_DEFAULT = "https://github.com/ayoho/slsa-maven-plugin/tree/main/v1.0";
+    public static final String BUILD_TYPE_DEFAULT = "https://github.com/WASdev/slsa-maven-plugin/tree/main/v1.0";
 
     public static final String PROVENANCE_FILE_DEFAULT_OUTPUT_PATH = "target/slsa";
     public static final String PROVENANCE_FILE_DEFAULT_NAME = "slsa_provenance.json";

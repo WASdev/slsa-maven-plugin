@@ -73,7 +73,7 @@ Optional parameters:
 
     `$ mvn package -DbuilderId="https://example.com/builder_id" -DprovenanceFileName="provenance.json"`
 
-- `-DbuildType`: A URI, which has requirements that can be found at https://slsa.dev/spec/v1.0/provenance#buildType. The default value is `https://github.com/ayoho/slsa-maven-plugin/tree/main/v1.0`. It is recommended to update the build type using this parameter if this repository is forked.
+- `-DbuildType`: A URI, which has requirements that can be found at https://slsa.dev/spec/v1.0/provenance#buildType. The default value is `https://github.com/WASdev/slsa-maven-plugin/tree/main/v1.0`. It is recommended to update the build type using this parameter if this repository is forked.
 
     Example:
 
