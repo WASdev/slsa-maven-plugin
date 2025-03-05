@@ -44,9 +44,9 @@ import com.ibm.slsa.maven.plugin.exceptions.SlsaPredicateGenerationException;
 import com.ibm.slsa.maven.plugin.exceptions.StatementException;
 import com.ibm.slsa.maven.plugin.utils.git.GitUtils;
 import com.ibm.slsa.maven.plugin.utils.maven.MavenUtils;
-import com.ibm.slsa.maven.plugin.utils.war.WarUtils;
-import com.ibm.slsa.maven.plugin.utils.war.exceptions.WarException;
-import com.ibm.slsa.maven.plugin.utils.war.exceptions.WarNotFoundException;
+import com.ibm.slsa.maven.plugin.utils.war.PackageTypeUtils;
+import com.ibm.slsa.maven.plugin.utils.war.exceptions.PackageFileException;
+import com.ibm.slsa.maven.plugin.utils.war.exceptions.PackageFileNotFoundException;
 import jakarta.json.Json;
 import jakarta.json.JsonArray;
 import jakarta.json.JsonArrayBuilder;
@@ -69,7 +69,7 @@ public class ProvenanceGenerator {
     private String buildType;
     private MavenSession mavenSession;
     private GitUtils gitUtils;
-    private WarUtils warUtils;
+    private PackageTypeUtils warUtils;
     private MavenUtils mavenUtils;
 
     public ProvenanceGenerator(String builderId, String buildType, MavenProject project, MavenSession mavenSession, Log log) {
@@ -77,7 +77,7 @@ public class ProvenanceGenerator {
         this.buildType = buildType;
         this.mavenSession = mavenSession;
         this.gitUtils = new GitUtils();
-        this.warUtils = new WarUtils(project, log);
+        this.warUtils = new PackageTypeUtils(project, log);
         this.mavenUtils = new MavenUtils(project, mavenSession);
     }
 
@@ -87,7 +87,7 @@ public class ProvenanceGenerator {
             SlsaPredicate predicate = buildSlsaPredicate();
             Statement statement = buildStatement(subject, predicate);
             return statement.toJson();
-        } catch (WarNotFoundException e) {
+        } catch (PackageFileNotFoundException e) {
             // Allow for now
             return JsonObject.EMPTY_JSON_OBJECT;
         } catch (Exception e) {
@@ -95,9 +95,9 @@ public class ProvenanceGenerator {
         }
     }
 
-    private Subject buildSubject() throws DigestCalculationException, WarException, WarFileException {
+    private Subject buildSubject() throws DigestCalculationException, PackageFileException, WarFileException {
         // Subject reflects only a single .war file located in the Maven project's build directory
-        WarResourceDescriptor warResourceDescriptor = new WarResourceDescriptor(warUtils.getBuiltWar());
+        WarResourceDescriptor warResourceDescriptor = new WarResourceDescriptor(warUtils.getBuiltPackage());
         Subject.Builder subjectBuilder = new Subject.Builder();
         subjectBuilder.resourceDescriptor(warResourceDescriptor);
         return subjectBuilder.build();

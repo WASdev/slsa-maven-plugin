@@ -2,7 +2,7 @@ package com.ibm.slsa.maven.plugin.utils.war.exceptions;
 
 import java.io.File;
 
-public class MultipleWarsFoundException extends WarException {
+public class MultipleWarsFoundException extends PackageFileException {
 
     private static final String ERROR_MSG = "There were multiple .war files found in the %s directory: %s";
 

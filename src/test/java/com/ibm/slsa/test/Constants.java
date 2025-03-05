@@ -23,7 +23,9 @@ public class Constants {
     public static final String RESOURCES_DIR = "src" + File.separator + "test" + File.separator + "resources" + File.separator;
 
     public static final String FILE_NAME_SIMPLE_TXT = "simple.txt";
-    public static final String FILE_NAME_APP_WAR = "app.war";
+    public static final String FINAL_NAME_APP = "app";
+    public static final String PACKAGE_TYPE = "ear";
+    public static final String FILE_NAME_APP_WAR = FINAL_NAME_APP + "." + PACKAGE_TYPE;
 
     public static final String FILE_PATH_SIMPLE_TXT = RESOURCES_DIR + FILE_NAME_SIMPLE_TXT;
     public static final String FILE_PATH_APP_WAR = RESOURCES_DIR + FILE_NAME_APP_WAR;
