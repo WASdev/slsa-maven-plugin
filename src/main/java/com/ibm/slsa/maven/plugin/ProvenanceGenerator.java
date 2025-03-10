@@ -26,8 +26,8 @@ import org.apache.maven.project.MavenProject;
 
 import com.ibm.intoto.attestation.Statement;
 import com.ibm.intoto.attestation.Subject;
-import com.ibm.intoto.attestation.custom.resource.descriptors.file.WarResourceDescriptor;
-import com.ibm.intoto.attestation.custom.resource.descriptors.file.exceptions.WarFileException;
+import com.ibm.intoto.attestation.custom.resource.descriptors.file.FileResourceDescriptor;
+import com.ibm.intoto.attestation.custom.resource.descriptors.file.exceptions.ResourceFileException;
 import com.ibm.intoto.attestation.custom.resource.descriptors.git.GitRepositoryResourceDescriptor;
 import com.ibm.intoto.attestation.exceptions.DigestCalculationException;
 import com.ibm.intoto.attestation.exceptions.StatementValueNullException;
@@ -96,11 +96,11 @@ public class ProvenanceGenerator {
         }
     }
 
-    private Subject buildSubject() throws DigestCalculationException, PackageFileException, WarFileException {
+    private Subject buildSubject() throws DigestCalculationException, PackageFileException, ResourceFileException {
         // Subject reflects only a single .war file located in the Maven project's build directory
-        WarResourceDescriptor warResourceDescriptor = new WarResourceDescriptor(packageUtils.getBuiltPackage());
+        FileResourceDescriptor fileResourceDescriptor = new FileResourceDescriptor(packageUtils.getBuiltPackage());
         Subject.Builder subjectBuilder = new Subject.Builder();
-        subjectBuilder.resourceDescriptor(warResourceDescriptor);
+        subjectBuilder.resourceDescriptor(fileResourceDescriptor);
         return subjectBuilder.build();
     }
 
