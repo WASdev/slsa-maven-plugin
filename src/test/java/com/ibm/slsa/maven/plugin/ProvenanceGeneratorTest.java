@@ -41,11 +41,13 @@ import com.ibm.slsa.Builder;
 import com.ibm.slsa.RunDetails;
 import com.ibm.slsa.SlsaPredicate;
 import com.ibm.slsa.maven.plugin.exceptions.ProvenanceGenerationException;
-import com.ibm.slsa.maven.plugin.utils.war.exceptions.MultipleWarsFoundException;
 import com.ibm.slsa.test.CommonTestUtils;
 import com.ibm.slsa.test.Constants;
 import jakarta.json.JsonArray;
 import jakarta.json.JsonObject;
+
+import org.apache.maven.artifact.DefaultArtifact;
+import org.apache.maven.artifact.handler.DefaultArtifactHandler;
 
 @ExtendWith(MockitoExtension.class)
 public class ProvenanceGeneratorTest {
@@ -59,44 +61,18 @@ public class ProvenanceGeneratorTest {
     private String buildType = "myBuildType";
     private CommonTestUtils testUtils = new CommonTestUtils();
 
-    @Test
-    void test_generateProvenanceFileData_noWars() {
-        ProvenanceGenerator generator = new ProvenanceGenerator(builderId, buildType, project, mavenSession, log);
-
-        when(project.getBuild()).thenReturn(projectBuild);
-        when(projectBuild.getDirectory()).thenReturn(Constants.RESOURCES_DIR + File.separator + "no-wars");
-
-        try {
-            JsonObject provenanceData = generator.generateProvenanceFileData();
-            assertEquals(JsonObject.EMPTY_JSON_OBJECT, provenanceData);
-        } catch (ProvenanceGenerationException e) {
-            fail("Should not have thrown an exception but did: " + e);
-        }
-    }
-
-    @Test
-    void test_generateProvenanceFileData_multipleWars() {
-        ProvenanceGenerator generator = new ProvenanceGenerator(builderId, buildType, project, mavenSession, log);
-
-        when(project.getBuild()).thenReturn(projectBuild);
-        when(projectBuild.getDirectory()).thenReturn(Constants.RESOURCES_DIR + File.separator + "multiple-wars");
-
-        try {
-            JsonObject provenanceData = generator.generateProvenanceFileData();
-            fail("Should have thrown an exception but didn't. Generated provenance data: " + provenanceData);
-        } catch (ProvenanceGenerationException e) {
-            // Expected
-            assertEquals(MultipleWarsFoundException.class.getName(), e.getCause().getClass().getName(), "Exception cause did not match expected value. Full exception was: " + e);
-        }
-    }
+    DefaultArtifactHandler artifactHandler = new DefaultArtifactHandler(Constants.PACKAGE_TYPE);
+    DefaultArtifact artifact = new DefaultArtifact("com.example", builderId, "1.0", builderId, buildType, buildType, artifactHandler);
 
     @Test
     void test_generateProvenanceFileData() {
         ProvenanceGenerator generator = new ProvenanceGenerator(builderId, buildType, project, mavenSession, log);
 
+        when(project.getArtifact()).thenReturn(artifact);
         when(project.getBuild()).thenReturn(projectBuild);
-        when(projectBuild.getDirectory()).thenReturn(Constants.RESOURCES_DIR + File.separator + "one-war");
+        when(projectBuild.getDirectory()).thenReturn(Constants.RESOURCES_DIR + File.separator + "one-package");
         when(mavenSession.getStartTime()).thenReturn(new Date());
+        when(project.getBuild().getFinalName()).thenReturn(Constants.FINAL_NAME_APP);
 
         try {
             JsonObject statement = generator.generateProvenanceFileData();
