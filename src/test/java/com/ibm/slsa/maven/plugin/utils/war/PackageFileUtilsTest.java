@@ -18,12 +18,17 @@ package com.ibm.slsa.maven.plugin.utils.war;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.lenient;
+import static org.mockito.Mockito.mock;
 
 import java.io.File;
+import java.util.Arrays;
+import java.util.List;
 
 import org.apache.maven.artifact.DefaultArtifact;
 import org.apache.maven.artifact.handler.DefaultArtifactHandler;
+import org.apache.maven.execution.MavenSession;
+import org.apache.maven.execution.ProjectDependencyGraph;
 import org.apache.maven.model.Build;
 import org.apache.maven.plugin.logging.Log;
 import org.apache.maven.project.MavenProject;
@@ -38,30 +43,65 @@ import com.ibm.slsa.test.Constants;
 @ExtendWith(MockitoExtension.class)
 public class PackageFileUtilsTest {
 
-    @Mock private MavenProject project;
-    @Mock private Build projectBuild;
-    @Mock private Log log;
+    @Mock
+    private MavenProject project;
+    @Mock
+    private MavenSession mavenSession;
+    @Mock
+    private Build projectBuild;
+    @Mock
+    private Log log;
 
     private String builderId = "myBuilderId";
     private String buildType = "myBuildType";
     DefaultArtifactHandler artifactHandler = new DefaultArtifactHandler(Constants.PACKAGE_TYPE);
-    DefaultArtifact artifact = new DefaultArtifact("com.example", builderId, "1.0", builderId, buildType, buildType, artifactHandler);
+    DefaultArtifact artifact = new DefaultArtifact("com.example", builderId, "1.0", builderId, buildType, buildType,
+            artifactHandler);
 
     @Test
     public void test_onePackageFile() {
-        PackageTypeUtils utils = new PackageTypeUtils(project, log);
+        PackageTypeUtils utils = new PackageTypeUtils(project, mavenSession, log);
 
-        when(project.getBuild()).thenReturn(projectBuild);
-        when(projectBuild.getDirectory()).thenReturn(Constants.RESOURCES_DIR + File.separator + "one-package");
-        when(project.getArtifact()).thenReturn(artifact);
-        when(project.getBuild().getFinalName()).thenReturn(Constants.FINAL_NAME_APP);
+        lenient().when(project.getBuild()).thenReturn(projectBuild);
+        lenient().when(project.getBuild().getFinalName()).thenReturn(Constants.FINAL_NAME_APP);
+
+        ProjectDependencyGraph pdg = mock(ProjectDependencyGraph.class);
+        lenient().when(mavenSession.getProjectDependencyGraph()).thenReturn(pdg);
+
+        MavenProject mp1 = createProjectParent();
+        MavenProject mp2 = createProjectChild1(mp1);
+        MavenProject mp3 = createProjectChild2(mp1);
+
+        List<MavenProject> theList = Arrays.asList(mp1, mp2, mp3);
+        lenient().when(pdg.getSortedProjects()).thenReturn(theList);
 
         try {
-            File packageFile = utils.getBuiltPackage();
-            assertEquals("app.ear", packageFile.getName(), "Package file name did not match expected value.");
+            List<File> packageFile = utils.getBuiltPackage();
+            assertEquals("app.ear", packageFile.get(0).getName(), "Package file name did not match expected value.");
         } catch (PackageFileException e) {
             fail("Encountered unexpected exception: " + e);
         }
+    }
+
+    private MavenProject createProjectParent() {
+        MavenProject mp1 = mock(MavenProject.class);
+        lenient().when(mp1.getBuild()).thenReturn(projectBuild);
+        lenient().when(mp1.getArtifact()).thenReturn(artifact);
+        return mp1;
+    }
+
+    private MavenProject createProjectChild1(MavenProject parent) {
+        MavenProject mp2 = mock(MavenProject.class);
+        lenient().when(mp2.getBuild()).thenReturn(projectBuild);
+        lenient().when(mp2.getArtifact()).thenReturn(artifact);
+        return mp2;
+    }
+
+    private MavenProject createProjectChild2(MavenProject parent) {
+        MavenProject mp3 = mock(MavenProject.class);
+        lenient().when(mp3.getBuild()).thenReturn(projectBuild);
+        lenient().when(mp3.getArtifact()).thenReturn(artifact);
+        return mp3;
     }
 
 }
