@@ -37,15 +37,19 @@ public class MavenUtils {
     }
 
     public void addMavenProjectDependencies(JsonArrayBuilder builder) {
-        List<Dependency> dependencies = project.getDependencies();
-        Stream<Dependency> dependenciesStream = dependencies.stream();
-        dependenciesStream.forEach(d -> {
-            MavenArtifactResourceDescriptor artifact = new MavenArtifactResourceDescriptor(d);
-            String scope = d.getScope();
-            if (!isMavenArtifactScopeToIgnore(scope)) {
-                builder.add(artifact.toJson());
-            }
-        });
+
+        List<MavenProject> projects = mavenSession.getProjectDependencyGraph().getSortedProjects();
+        for (MavenProject prj : projects) {
+            List<Dependency> dependencies = prj.getDependencies();
+            Stream<Dependency> dependenciesStream = dependencies.stream();
+            dependenciesStream.forEach(d -> {
+                MavenArtifactResourceDescriptor artifact = new MavenArtifactResourceDescriptor(d);
+                String scope = d.getScope();
+                if (!isMavenArtifactScopeToIgnore(scope)) {
+                    builder.add(artifact.toJson());
+                }
+            });
+        }
     }
 
     private boolean isMavenArtifactScopeToIgnore(String scope) {

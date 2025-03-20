@@ -17,13 +17,16 @@
 package com.ibm.slsa.maven.plugin.utils.maven;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
 
 import org.apache.maven.execution.MavenSession;
+import org.apache.maven.execution.ProjectDependencyGraph;
 import org.apache.maven.model.Dependency;
 import org.apache.maven.project.MavenProject;
 import org.junit.jupiter.api.BeforeEach;
@@ -33,6 +36,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.ibm.slsa.test.CommonTestUtils;
+
 import jakarta.json.Json;
 import jakarta.json.JsonArray;
 import jakarta.json.JsonArrayBuilder;
@@ -84,6 +88,16 @@ public class MavenUtilsTest {
 
     @Test
     public void test_addMavenProjectDependencies_noDependencies() {
+
+        ProjectDependencyGraph pdg = mock(ProjectDependencyGraph.class);
+        when(mavenSession.getProjectDependencyGraph()).thenReturn(pdg);
+
+        MavenProject mp1 = createProjectParent();
+        MavenProject mp2 = createProjectChild1(mp1);
+        MavenProject mp3 = createProjectChild2(mp1);
+
+        List<MavenProject> projectList = Arrays.asList(mp1, mp2, mp3);
+        when(pdg.getSortedProjects()).thenReturn(projectList);
         JsonArrayBuilder builder = Json.createArrayBuilder();
 
         utils.addMavenProjectDependencies(builder);
@@ -94,12 +108,23 @@ public class MavenUtilsTest {
 
     @Test
     public void test_addMavenProjectDependencies_emptyDependency() {
+
+        ProjectDependencyGraph pdg = mock(ProjectDependencyGraph.class);
+        when(mavenSession.getProjectDependencyGraph()).thenReturn(pdg);
+
+        MavenProject mp1 = createProjectParent();
+        MavenProject mp2 = createProjectChild1(mp1);
+        MavenProject mp3 = createProjectChild2(mp1);
+
+        List<MavenProject> projectList = Arrays.asList(mp1, mp2, mp3);
+        when(pdg.getSortedProjects()).thenReturn(projectList);
+
         JsonArrayBuilder builder = Json.createArrayBuilder();
 
         Dependency dependency = new Dependency();
         List<Dependency> dependencies = new ArrayList<>();
         dependencies.add(dependency);
-        when(project.getDependencies()).thenReturn(dependencies);
+        when(mp2.getDependencies()).thenReturn(dependencies);
 
         utils.addMavenProjectDependencies(builder);
 
@@ -109,13 +134,24 @@ public class MavenUtilsTest {
 
     @Test
     public void test_addMavenProjectDependencies_oneDependency_testScope() {
+
+        ProjectDependencyGraph pdg = mock(ProjectDependencyGraph.class);
+        when(mavenSession.getProjectDependencyGraph()).thenReturn(pdg);
+
+        MavenProject mp1 = createProjectParent();
+        MavenProject mp2 = createProjectChild1(mp1);
+        MavenProject mp3 = createProjectChild2(mp1);
+
+        List<MavenProject> projectList = Arrays.asList(mp1, mp2, mp3);
+        when(pdg.getSortedProjects()).thenReturn(projectList);
+
         JsonArrayBuilder builder = Json.createArrayBuilder();
 
         final Dependency dependency = testUtils.createDependency("com.example", "code-api", "1.0.0", "test", "jar");
 
         List<Dependency> dependencies = new ArrayList<>();
         dependencies.add(dependency);
-        when(project.getDependencies()).thenReturn(dependencies);
+        when(mp2.getDependencies()).thenReturn(dependencies);
 
         utils.addMavenProjectDependencies(builder);
 
@@ -125,13 +161,22 @@ public class MavenUtilsTest {
 
     @Test
     public void test_addMavenProjectDependencies_oneDependency_providedScope() {
-        JsonArrayBuilder builder = Json.createArrayBuilder();
+        MavenProject mp1 = createProjectParent();
+        MavenProject mp2 = createProjectChild1(mp1);
 
         final Dependency dependency = testUtils.createDependency("com.example", "code-api", "1.0.0", "provided", "jar");
 
         List<Dependency> dependencies = new ArrayList<>();
         dependencies.add(dependency);
-        when(project.getDependencies()).thenReturn(dependencies);
+        when(mp2.getDependencies()).thenReturn(dependencies);
+
+        MavenProject mp3 = createProjectChild2(mp1);
+
+        List<MavenProject> projectList = Arrays.asList(mp1, mp2, mp3);
+        ProjectDependencyGraph pdg = mock(ProjectDependencyGraph.class);
+        when(mavenSession.getProjectDependencyGraph()).thenReturn(pdg);
+        when(pdg.getSortedProjects()).thenReturn(projectList);
+        JsonArrayBuilder builder = Json.createArrayBuilder();
 
         utils.addMavenProjectDependencies(builder);
 
@@ -143,6 +188,9 @@ public class MavenUtilsTest {
 
     @Test
     public void test_addMavenProjectDependencies_multipleDependencies() {
+        MavenProject mp1 = createProjectParent();
+        MavenProject mp2 = createProjectChild1(mp1);
+
         JsonArrayBuilder builder = Json.createArrayBuilder();
 
         final Dependency providedDependency1 = testUtils.createDependency("com.example", "code-api", "1.0.0", "provided", "jar");
@@ -159,7 +207,14 @@ public class MavenUtilsTest {
         dependencies.add(providedDependency3);
         dependencies.add(providedDependency4);
         dependencies.add(testDependency2);
-        when(project.getDependencies()).thenReturn(dependencies);
+        when(mp2.getDependencies()).thenReturn(dependencies);
+
+        MavenProject mp3 = createProjectChild2(mp1);
+
+        List<MavenProject> projectList = Arrays.asList(mp1, mp2, mp3);
+        ProjectDependencyGraph pdg = mock(ProjectDependencyGraph.class);
+        when(mavenSession.getProjectDependencyGraph()).thenReturn(pdg);
+        when(pdg.getSortedProjects()).thenReturn(projectList);
 
         utils.addMavenProjectDependencies(builder);
 
@@ -173,6 +228,21 @@ public class MavenUtilsTest {
         testUtils.assertDependencyJsonMatchesValues(providedDependency3, dependency3Json);
         JsonObject dependency4Json = result.getJsonObject(3);
         testUtils.assertDependencyJsonMatchesValues(providedDependency4, dependency4Json);
+    }
+
+    private MavenProject createProjectParent() {
+        MavenProject mp1 = mock(MavenProject.class);
+        return mp1;
+    }
+
+    private MavenProject createProjectChild1(MavenProject parent) {
+        MavenProject mp2 = mock(MavenProject.class);
+        return mp2;
+    }
+
+    private MavenProject createProjectChild2(MavenProject parent) {
+        MavenProject mp3 = mock(MavenProject.class);
+        return mp3;
     }
 
 }
