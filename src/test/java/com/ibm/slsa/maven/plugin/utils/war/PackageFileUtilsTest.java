@@ -51,8 +51,7 @@ public class PackageFileUtilsTest {
     private String builderId = "myBuilderId";
     private String buildType = "myBuildType";
     DefaultArtifactHandler artifactHandler = new DefaultArtifactHandler(Constants.PACKAGE_TYPE);
-    DefaultArtifact artifact = new DefaultArtifact("com.example", builderId, "1.0", builderId, buildType, buildType,
-            artifactHandler);
+    DefaultArtifact artifact = new DefaultArtifact("com.example", builderId, "1.0", builderId, buildType, buildType, artifactHandler);
 
     @Test
     public void test_onePackageFile() {
