@@ -53,7 +53,7 @@ import jakarta.json.JsonArray;
 import jakarta.json.JsonArrayBuilder;
 import jakarta.json.JsonObject;
 import jakarta.json.JsonObjectBuilder;
-
+import java.io.File;
 /**
  * Generates provenance in the form of an in-toto attestation Statement (see https://github.com/in-toto/attestation/blob/main/spec/v1/statement.md).
  * The Statement's Predicate uses the SLSA v1 predicate format (see https://slsa.dev/provenance/v1). The subject of the statement
@@ -78,7 +78,7 @@ public class ProvenanceGenerator {
         this.buildType = buildType;
         this.mavenSession = mavenSession;
         this.gitUtils = new GitUtils();
-        this.packageUtils = new PackageTypeUtils(project, log);
+        this.packageUtils = new PackageTypeUtils(project, mavenSession, log);
         this.mavenUtils = new MavenUtils(project, mavenSession);
     }
 
@@ -98,9 +98,11 @@ public class ProvenanceGenerator {
 
     private Subject buildSubject() throws DigestCalculationException, PackageFileException, ResourceFileException {
         // Subject reflects only a single .war file located in the Maven project's build directory
-        FileResourceDescriptor fileResourceDescriptor = new FileResourceDescriptor(packageUtils.getBuiltPackage());
         Subject.Builder subjectBuilder = new Subject.Builder();
-        subjectBuilder.resourceDescriptor(fileResourceDescriptor);
+        for (File file : packageUtils.getBuiltPackage()) {
+            FileResourceDescriptor fileResourceDescriptor = new FileResourceDescriptor(file);
+            subjectBuilder.resourceDescriptor(fileResourceDescriptor);
+        }
         return subjectBuilder.build();
     }
 

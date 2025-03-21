@@ -18,12 +18,16 @@ package com.ibm.slsa.maven.plugin;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import java.io.File;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 
 import org.apache.maven.execution.MavenSession;
+import org.apache.maven.execution.ProjectDependencyGraph;
 import org.apache.maven.model.Build;
 import org.apache.maven.plugin.logging.Log;
 import org.apache.maven.project.MavenProject;
@@ -68,11 +72,20 @@ public class ProvenanceGeneratorTest {
     void test_generateProvenanceFileData() {
         ProvenanceGenerator generator = new ProvenanceGenerator(builderId, buildType, project, mavenSession, log);
 
-        when(project.getArtifact()).thenReturn(artifact);
         when(project.getBuild()).thenReturn(projectBuild);
         when(projectBuild.getDirectory()).thenReturn(Constants.RESOURCES_DIR + File.separator + "one-package");
         when(mavenSession.getStartTime()).thenReturn(new Date());
         when(project.getBuild().getFinalName()).thenReturn(Constants.FINAL_NAME_APP);
+
+        ProjectDependencyGraph pdg = mock(ProjectDependencyGraph.class);
+        when(mavenSession.getProjectDependencyGraph()).thenReturn(pdg);
+
+        MavenProject mp1 = createProjectParent();
+        MavenProject mp2 = createProjectChild1(mp1);
+        MavenProject mp3 = createProjectChild2(mp1);
+
+        List<MavenProject> theList = Arrays.asList(mp1, mp2, mp3);
+        when(pdg.getSortedProjects()).thenReturn(theList);
 
         try {
             JsonObject statement = generator.generateProvenanceFileData();
@@ -86,13 +99,34 @@ public class ProvenanceGeneratorTest {
         }
     }
 
+    private MavenProject createProjectParent() {
+        MavenProject mp1 = mock(MavenProject.class);
+        when(mp1.getBuild()).thenReturn(projectBuild);
+        when(mp1.getArtifact()).thenReturn(artifact);
+        return mp1;
+    }
+
+    private MavenProject createProjectChild1(MavenProject parent) {
+        MavenProject mp2 = mock(MavenProject.class);
+        when(mp2.getBuild()).thenReturn(projectBuild);
+        when(mp2.getArtifact()).thenReturn(artifact);
+        return mp2;
+    }
+
+    private MavenProject createProjectChild2(MavenProject parent) {
+        MavenProject mp3 = mock(MavenProject.class);
+        when(mp3.getBuild()).thenReturn(projectBuild);
+        when(mp3.getArtifact()).thenReturn(artifact);
+        return mp3;
+    }
+
     private void verifyStatementType(JsonObject statement) {
         testUtils.assertJsonStringEntryMatches("Statement", statement, Statement.KEY_TYPE, Statement.TYPE_IN_TOTO_STATEMENT);
     }
 
     private void verifyStatementSubject(JsonObject statement) {
         JsonArray subject = statement.getJsonArray(Statement.KEY_SUBJECT);
-        assertEquals(1, subject.size(), "Should have only found 1 entry in the subject, but did not. Full subject was: " + subject);
+        assertEquals(3, subject.size(), "Should have only found 3 entry in the subject, but did not. Full subject was: " + subject);
 
         JsonObject subjectEntry = subject.getJsonObject(0);
         testUtils.assertJsonOnlyContainsKeys("Subject", subjectEntry, ResourceDescriptor.KEY_NAME, ResourceDescriptor.KEY_DIGEST);
@@ -122,7 +156,7 @@ public class ProvenanceGeneratorTest {
         testUtils.assertJsonOnlyContainsKeys("External parameters", externalParameters, ProvenanceGenerator.KEY_EXT_PARAMS_REPOSITORY, ProvenanceGenerator.KEY_EXT_PARAMS_REF);
         testUtils.assertStringMatchesRegex("^git@github.+\\.git$", externalParameters.getString(ProvenanceGenerator.KEY_EXT_PARAMS_REPOSITORY));
         testUtils.assertStringMatchesRegex("^refs/heads/[^/]+$", externalParameters.getString(ProvenanceGenerator.KEY_EXT_PARAMS_REF));
-        
+
         JsonArray resolvedDependencies = buildDefinition.getJsonArray(BuildDefinition.KEY_RESOLVED_DEPENDENCIES);
         assertEquals(1, resolvedDependencies.size(), "Expected to only find one entry in resolved dependencies. Dependencies were: " + resolvedDependencies);
         JsonObject gitRepoDependency = resolvedDependencies.getJsonObject(0);
