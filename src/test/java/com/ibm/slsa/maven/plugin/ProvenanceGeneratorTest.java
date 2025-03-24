@@ -154,7 +154,7 @@ public class ProvenanceGeneratorTest {
 
         JsonObject externalParameters = buildDefinition.getJsonObject(BuildDefinition.KEY_EXTERNAL_PARAMETERS);
         testUtils.assertJsonOnlyContainsKeys("External parameters", externalParameters, ProvenanceGenerator.KEY_EXT_PARAMS_REPOSITORY, ProvenanceGenerator.KEY_EXT_PARAMS_REF);
-        testUtils.assertStringMatchesRegex("^git@github.+\\.git$", externalParameters.getString(ProvenanceGenerator.KEY_EXT_PARAMS_REPOSITORY));
+        testUtils.assertStringMatchesRegex("^(git@|https://)github.+\\.git$", externalParameters.getString(ProvenanceGenerator.KEY_EXT_PARAMS_REPOSITORY));
         testUtils.assertStringMatchesRegex("^refs/heads/[^/]+$", externalParameters.getString(ProvenanceGenerator.KEY_EXT_PARAMS_REF));
 
         JsonArray resolvedDependencies = buildDefinition.getJsonArray(BuildDefinition.KEY_RESOLVED_DEPENDENCIES);
