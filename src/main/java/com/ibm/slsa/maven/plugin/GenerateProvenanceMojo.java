@@ -19,6 +19,7 @@ package com.ibm.slsa.maven.plugin;
 import java.io.File;
 import java.io.FileWriter;
 import java.nio.charset.Charset;
+import java.util.Collections;
 
 import org.apache.maven.execution.MavenSession;
 import org.apache.maven.plugin.AbstractMojo;
@@ -28,7 +29,11 @@ import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.project.MavenProject;
 
 import com.ibm.slsa.maven.plugin.exceptions.ProvenanceGenerationException;
+
+import jakarta.json.Json;
 import jakarta.json.JsonObject;
+import jakarta.json.JsonWriter;
+import jakarta.json.stream.JsonGenerator;
 
 /**
  * This is the Javadoc for the GenerateProvenanceMojo class.
@@ -98,13 +103,24 @@ public class GenerateProvenanceMojo extends AbstractMojo {
     private void createProvenanceFile() throws MojoExecutionException {
         new File(provenanceFilePath).mkdirs();
         File newFile = new File(provenanceFilePath + File.separator + provenanceFileName);
+        JsonWriter jsonWriter = null;
         try {
             FileWriter writer = new FileWriter(newFile);
             newFile.createNewFile();
-            writer.write(getFileContents().toString());
-            writer.close();
+
+            jsonWriter = Json.createWriterFactory(
+                Collections.singletonMap(JsonGenerator.PRETTY_PRINTING, true))
+                .createWriter(writer);
+
+            jsonWriter.writeObject(getFileContents());
         } catch (Exception e) {
             throw new MojoExecutionException("Failed creating the provenance file or writing the provenance file contents: " + e.getMessage(), e);
+        } finally {
+            if (jsonWriter != null) {
+                try {
+                    jsonWriter.close();
+                } catch (Exception ignore) {}
+            }
         }
     }
 
