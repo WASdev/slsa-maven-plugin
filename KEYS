@@ -1,0 +1,41 @@
+-------------------------------------------------------------------------------
+ * Copyright 2025 International Business Machines Corp.
+ * 
+ * See the NOTICE file distributed with this work for additional information
+ * regarding copyright ownership. Licensed under the Apache License, 
+ * Version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License. You may obtain a copy of the License at
+ * 
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+-------------------------------------------------------------------------------
+This file contains the PGP keys of contributors to the slsa-maven-plugin project
+-------------------------------------------------------------------------------
+
+uid Jacob de Vos <jacobwdv@ca.ibm.com>
+sig cert  c541ed826b775302 2025-03-26T20:17:56Z 2028-03-25T20:17:56Z ____________________ [selfsig]
+
+sub (4)ecdh263/fd5c64b8598e947a8af14139f9eabb2159e49d39 2025-03-26T20:17:56Z
+sig sbind  c541ed826b775302 2025-03-26T20:17:56Z ____________________ 2028-03-25T20:17:56Z []
+
+
+-----BEGIN PGP PUBLIC KEY BLOCK-----
+Comment: Hostname: 
+Version: Hockeypuck 2.2
+
+xjMEZ+Rg9BYJKwYBBAHaRw8BAQdAJIQd3ruEMSGCh+zQGwRaPjEHVpViVYUsGpJe
+h71DxrXNIkphY29iIGRlIFZvcyA8amFjb2J3ZHZAY2EuaWJtLmNvbT7CmQQTFgoA
+QRYhBCB03MgcUQOCqRWAgMVB7YJrd1MCBQJn5GD0AhsDBQkFo5qABQsJCAcCAiIC
+BhUKCQgLAgQWAgMBAh4HAheAAAoJEMVB7YJrd1MCsRsA/j3XCj+Ot0wxHcwVZ36B
+uKh3MOZPe0xZnSR+qhAV+JctAPsFkKAUux9oNH3rzmR+ikx5n2URptojDkRSKnIu
+eoBeBs44BGfkYPQSCisGAQQBl1UBBQEBB0CajHE2McE7N2KX9iizHiLmoUWaOfa+
+Ixt2IvBxU79ZHQMBCAfCfgQYFgoAJhYhBCB03MgcUQOCqRWAgMVB7YJrd1MCBQJn
+5GD0AhsMBQkFo5qAAAoJEMVB7YJrd1MCbmEA/ApamyLeb1HIpeKVfjdyBTGanwMa
+QIUqRQl4Nl6eGSSLAP9PYXNjNGoRlm7IKmZLeHlbolvwJqpm5zUMh0uo2EolBw==
+=8b8J
+-----END PGP PUBLIC KEY BLOCK-----
