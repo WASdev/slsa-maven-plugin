@@ -43,10 +43,12 @@ public class MavenUtils {
             List<Dependency> dependencies = prj.getDependencies();
             Stream<Dependency> dependenciesStream = dependencies.stream();
             dependenciesStream.forEach(d -> {
-                MavenArtifactResourceDescriptor artifact = new MavenArtifactResourceDescriptor(d);
-                String scope = d.getScope();
-                if (!isMavenArtifactScopeToIgnore(scope)) {
-                    builder.add(artifact.toJson());
+                if (!isSubModuleDependency(projects,d)){
+                    MavenArtifactResourceDescriptor artifact = new MavenArtifactResourceDescriptor(d);
+                    String scope = d.getScope();
+                    if (!isMavenArtifactScopeToIgnore(scope)) {
+                        builder.add(artifact.toJson());
+                    }
                 }
             });
         }
@@ -55,6 +57,15 @@ public class MavenUtils {
     private boolean isMavenArtifactScopeToIgnore(String scope) {
         // Only add non-test dependencies
         return scope == null || "test".equalsIgnoreCase(scope);
+    }
+
+    private boolean isSubModuleDependency(List<MavenProject> projects, Dependency dependency){
+        return projects.stream().anyMatch(p -> p.getGroupId().equals(dependency.getGroupId())
+                                            &&
+                                        p.getArtifactId().equals(dependency.getArtifactId())
+                                            &&
+                                        p.getVersion().equals(dependency.getVersion())
+        );
     }
 
 }
