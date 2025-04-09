@@ -244,5 +244,5 @@ public class MavenUtilsTest {
         MavenProject mp3 = mock(MavenProject.class);
         return mp3;
     }
-
+    
 }
