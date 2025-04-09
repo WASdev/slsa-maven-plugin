@@ -16,9 +16,11 @@
 */
 package com.ibm.slsa.maven.plugin.utils.maven;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map.Entry;
 import java.util.Properties;
+import java.util.Set;
 import java.util.stream.Stream;
 
 import org.apache.maven.execution.MavenSession;
@@ -55,6 +57,7 @@ public class MavenUtils {
     public void addMavenProjectDependencies(JsonArrayBuilder builder) {
 
         List<MavenProject> projects = mavenSession.getProjectDependencyGraph().getSortedProjects();
+        Set<MavenArtifactResourceDescriptor> artifactsSet = new HashSet<MavenArtifactResourceDescriptor>();
         for (MavenProject prj : projects) {
             List<Dependency> dependencies = prj.getDependencies();
             Stream<Dependency> dependenciesStream = dependencies.stream();
@@ -64,7 +67,11 @@ public class MavenUtils {
                     MavenArtifactResourceDescriptor artifact = new MavenArtifactResourceDescriptor(d);
                     String scope = d.getScope();
                     if (!isMavenArtifactScopeToIgnore(scope)) {
-                        builder.add(artifact.toJson());
+                        if (!artifactsSet.contains(artifact)){
+                            artifactsSet.add(artifact);
+                            builder.add(artifact.toJson());
+
+                        }
                     }
                 }
             });
