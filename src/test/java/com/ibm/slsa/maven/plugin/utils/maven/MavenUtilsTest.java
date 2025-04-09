@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 International Business Machines Corp..
+ * Copyright 2023, 2025 International Business Machines Corp..
  * 
  * See the NOTICE file distributed with this work for additional information
  * regarding copyright ownership. Licensed under the Apache License, 
@@ -106,7 +106,7 @@ public class MavenUtilsTest {
         assertEquals(result, JsonArray.EMPTY_JSON_ARRAY, "Should not have added any dependencies but did.");
     }
 
-    //@Test
+    @Test
     public void test_addMavenProjectDependencies_emptyDependency() {
 
         ProjectDependencyGraph pdg = mock(ProjectDependencyGraph.class);
@@ -132,7 +132,7 @@ public class MavenUtilsTest {
         assertEquals(result, JsonArray.EMPTY_JSON_ARRAY, "Should not have added any dependencies but did.");
     }
 
-    //@Test
+    @Test
     public void test_addMavenProjectDependencies_oneDependency_testScope() {
 
         ProjectDependencyGraph pdg = mock(ProjectDependencyGraph.class);
@@ -159,7 +159,7 @@ public class MavenUtilsTest {
         assertEquals(result, JsonArray.EMPTY_JSON_ARRAY, "Should not have added any dependencies but did.");
     }
 
-    //test_addMavenProjectDependencies_oneDependency_testScope@Test
+    @Test
     public void test_addMavenProjectDependencies_oneDependency_providedScope() {
         MavenProject mp1 = createProjectParent();
         MavenProject mp2 = createProjectChild1(mp1);
@@ -186,7 +186,7 @@ public class MavenUtilsTest {
         testUtils.assertDependencyJsonMatchesValues(dependency, dependencyJson);
     }
 
-    //test_addMavenProjectDependencies_oneDependency_providedScope@Test
+    @Test
     public void test_addMavenProjectDependencies_multipleDependencies() {
         MavenProject mp1 = createProjectParent();
         MavenProject mp2 = createProjectChild1(mp1);

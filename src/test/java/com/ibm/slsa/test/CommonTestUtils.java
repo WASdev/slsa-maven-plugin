@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 International Business Machines Corp..
+ * Copyright 2023, 2025 International Business Machines Corp..
  * 
  * See the NOTICE file distributed with this work for additional information
  * regarding copyright ownership. Licensed under the Apache License, 
@@ -104,7 +104,7 @@ public class CommonTestUtils {
 
         String expectedName = expectedGroupId + ":" + expectedArtifactId + ":" + expectedVersion;
         assertEquals(expectedName, dependencyJson.getString(MavenArtifactResourceDescriptor.KEY_NAME), "Name did not match the expected value.");
-        String expectedUri = String.format(MavenArtifactResourceDescriptor.URI_FORMAT, expectedGroupId, expectedArtifactId, expectedVersion);
+        String expectedUri = String.format(MavenArtifactResourceDescriptor.URI_FORMAT, expectedGroupId.replace(".","/"), expectedArtifactId, expectedVersion);
         assertEquals(expectedUri, dependencyJson.getString(MavenArtifactResourceDescriptor.KEY_URI), "URI did not match the expected value.");
 
         JsonObjectBuilder annotationsBuilder = Json.createObjectBuilder();
