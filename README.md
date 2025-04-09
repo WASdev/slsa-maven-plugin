@@ -121,7 +121,7 @@ This generates HTML pages in `target/site/` that contain information about the p
                 },
                 {
                     "name": "org.eclipse.microprofile:microprofile:4.0.1",
-                    "uri": "https://central.sonatype.com/artifact/org.eclipse.microprofile/microprofile/4.0.1",
+                    "uri": "https://repo1.maven.org/maven2/org/eclipse/microprofile/microprofile/4.0.1",
                     "annotations": {
                         "type": "pom",
                         "scope": "provided"
@@ -129,7 +129,7 @@ This generates HTML pages in `target/site/` that contain information about the p
                 },
                 {
                     "name": "jakarta.platform:jakarta.jakartaee-api:8.0.0",
-                    "uri": "https://central.sonatype.com/artifact/jakarta.platform/jakarta.jakartaee-api/8.0.0",
+                    "uri": "https://repo1.maven.org/maven2/jakarta/platform/jakarta.jakartaee-api/8.0.0",
                     "annotations": {
                         "type": "jar",
                         "scope": "provided"
@@ -137,7 +137,7 @@ This generates HTML pages in `target/site/` that contain information about the p
                 },
                 {
                     "name": "com.ibm.websphere.appserver.api:com.ibm.websphere.appserver.api.basics:1.4.60",
-                    "uri": "https://central.sonatype.com/artifact/com.ibm.websphere.appserver.api/com.ibm.websphere.appserver.api.basics/1.4.60",
+                    "uri": "https://repo1.maven.org/maven2/com/ibm/websphere/appserver/api/com.ibm.websphere.appserver.api.basics/1.4.60",
                     "annotations": {
                         "type": "jar",
                         "scope": "provided"
@@ -145,7 +145,7 @@ This generates HTML pages in `target/site/` that contain information about the p
                 },
                 {
                     "name": "org.apache.derby:derby:10.15.2.0",
-                    "uri": "https://central.sonatype.com/artifact/org.apache.derby/derby/10.15.2.0",
+                    "uri": "https://repo1.maven.org/maven2/org/apache/derby/derby/10.15.2.0",
                     "annotations": {
                         "type": "jar",
                         "scope": "provided"
@@ -153,7 +153,7 @@ This generates HTML pages in `target/site/` that contain information about the p
                 },
                 {
                     "name": "org.apache.derby:derbytools:10.15.2.0",
-                    "uri": "https://central.sonatype.com/artifact/org.apache.derby/derbytools/10.15.2.0",
+                    "uri": "https://repo1.maven.org/maven2/org/apache/derby/derbytools/10.15.2.0",
                     "annotations": {
                         "type": "jar",
                         "scope": "provided"
@@ -161,7 +161,7 @@ This generates HTML pages in `target/site/` that contain information about the p
                 },
                 {
                     "name": "org.apache.derby:derbyshared:10.15.2.0",
-                    "uri": "https://central.sonatype.com/artifact/org.apache.derby/derbyshared/10.15.2.0",
+                    "uri": "https://repo1.maven.org/maven2/org/apache/derby/derbyshared/10.15.2.0",
                     "annotations": {
                         "type": "jar",
                         "scope": "provided"
@@ -169,7 +169,7 @@ This generates HTML pages in `target/site/` that contain information about the p
                 },
                 {
                     "name": "com.ibm.websphere.appserver.api:com.ibm.websphere.appserver.api.jwt:1.1.62",
-                    "uri": "https://central.sonatype.com/artifact/com.ibm.websphere.appserver.api/com.ibm.websphere.appserver.api.jwt/1.1.62",
+                    "uri": "https://repo1.maven.org/maven2/com/ibm/websphere/appserver/api/com.ibm.websphere.appserver.api.jwt/1.1.62",
                     "annotations": {
                         "type": "jar",
                         "scope": "provided"

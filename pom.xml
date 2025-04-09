@@ -98,7 +98,7 @@
         <dependency>
             <groupId>com.ibm.websphere.appserver.features</groupId>
             <artifactId>intoto4j</artifactId>
-            <version>3.0.0</version>
+            <version>3.0.1-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>org.junit.jupiter</groupId>
