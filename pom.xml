@@ -2,7 +2,12 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
-
+    <scm>
+        <connection>scm:git:https://github.com/WASdev/slsa-maven-plugin.git</connection>
+        <developerConnection>scm:git:https://github.com/WASdev/slsa-maven-plugin.git</developerConnection>
+        <url>https://github.com/WASdev/slsa-maven-plugin</url>
+        <tag>HEAD</tag>
+    </scm>
     <groupId>com.ibm.websphere.appserver.features</groupId>
     <artifactId>slsa-maven-plugin</artifactId>
     <version>3.0.2-SNAPSHOT</version>
@@ -40,6 +45,7 @@
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.scm.id>github</project.scm.id>
     </properties>
 
     <repositories>
@@ -143,6 +149,9 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-release-plugin</artifactId>
+                <configuration>
+                    <goals>deploy</goals>
+                </configuration>
                 <version>3.1.1</version>
             </plugin>
             <plugin>
