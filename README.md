@@ -52,6 +52,8 @@ The new plugin goals will run as part of the `package` goal of the existing Mave
 
 ### Run the plugin
 
+Note: Versions prior to 4.0.0 have a minimum JDK level of JDK 8. 4.0.0 and later will require JDK 11.
+
 The plugin runs as part of the `package` goal of the project. The plugin needs a builder ID, a URI, which has requirements that can be found at https://slsa.dev/spec/v1.0/provenance#builder.id. The command will therefore look something like:
 
 ```
