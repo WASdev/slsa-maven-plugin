@@ -5,11 +5,11 @@
         <connection>scm:git:https://github.com/WASdev/slsa-maven-plugin.git</connection>
         <developerConnection>scm:git:https://github.com/WASdev/slsa-maven-plugin.git</developerConnection>
         <url>https://github.com/WASdev/slsa-maven-plugin</url>
-        <tag>v4.0.0</tag>
+        <tag>HEAD</tag>
     </scm>
     <groupId>com.ibm.websphere.appserver.features</groupId>
     <artifactId>slsa-maven-plugin</artifactId>
-    <version>4.0.0</version>
+    <version>4.0.1-SNAPSHOT</version>
     <packaging>maven-plugin</packaging>
     <name>SLSA Maven Plugin</name>
     <description>This plugin can be used to generate SLSA provenance for built artifacts.</description>
